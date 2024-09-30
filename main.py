@@ -5,7 +5,7 @@ import binascii
 
 from pathlib import Path
 
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk, messagebox
 import tkinter as tk
 import pyperclip
 
@@ -112,7 +112,10 @@ canvas.create_text(
     34.0,
     487.0,
     anchor="nw",
-    text="Rafiq Ikhwan    / 123220071\nAndrea Alfian   / 123220078\nPanji Arif           / 123220091\nDewangga M.   / 1232200",
+    text="Rafiq Ikhwan              / 123220071\n"
+         "Andrea Alfian              / 123220078\n"
+         "Panji Arif                      / 123220091\n"
+         "Dewangga M.             / 123220208",
     fill="#FFFFFF",
     font=("Roboto Regular", 12 * -1)
 )
@@ -444,6 +447,7 @@ def klasik1_bawah():
         klasik1_kunci.delete(0, tk.END)
         klasik1_kunci.insert(0, str(kunci))
         klasik1_chipper.event_generate("<KeyRelease>")
+
 Button(
     frame_klasik1,
     image=btn_atas,
@@ -609,9 +613,9 @@ Button(
 
 def vigenere_encrypt(plaintext, key):
     # Mengubah semua teks ke huruf kecil untuk penyederhanaan
-    plaintext = plaintext.lower()
+    # plaintext = plaintext.lower()
     key = key.lower()
-
+    print(key)
     # Menghapus spasi dari plaintext
     # plaintext = plaintext.replace(" ", "")
 
@@ -621,11 +625,18 @@ def vigenere_encrypt(plaintext, key):
     for char in plaintext:
         if char.isalpha():  # Hanya memproses huruf
             # Menggeser huruf dengan nilai kunci
-            shift = ord(key[key_index]) - ord('a')  # Menentukan nilai geser berdasarkan kunci
-            encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))  # Menggeser huruf
+            shift = ord(key[key_index]) - ord('a')  # Menentukan nilai geser berdasarkan kunci atau nilai unicode dari char
+            # misalkan (y = 121) - (a = 97) = 24
+            if char.isupper():
+                encrypted_char = chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+            else:
+                encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))  # Menggeser huruf
+            # misalkan K dan C = M, menentukan jarak dari K ke A dahulu misalkan 10
+            #                       menentukan jarak dari C ke A = 2
+            #                       jarak keuanya dijumlahkan = 12, dari a geser 12 = huruf ke 13 yaitu M
             encrypted_text += encrypted_char
 
-            # Perbarui index kunci, jika sudah mencapai panjang kunci, ulangi kembali dari awal
+            # Perbarui index kunci, jika sudah mencapai panjang kunci, ulangi kembali dari awal-
             key_index = (key_index + 1) % len(key)
         else:
             encrypted_text += char  # Jika bukan huruf, tambahkan tanpa perubahan
@@ -634,7 +645,7 @@ def vigenere_encrypt(plaintext, key):
 
 def vigenere_decrypt(ciphertext, key):
     # Mengubah semua teks ke huruf kecil untuk penyederhanaan
-    ciphertext = ciphertext.lower()
+    # ciphertext = ciphertext.lower()
     key = key.lower()
 
     decrypted_text = ""
@@ -644,7 +655,10 @@ def vigenere_decrypt(ciphertext, key):
         if char.isalpha():  # Hanya memproses huruf
             # Menggeser huruf dengan nilai kunci (berlawanan arah)
             shift = ord(key[key_index]) - ord('a')  # Menentukan nilai geser berdasarkan kunci
-            decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))  # Geser berlawanan arah
+            if char.isupper():
+                decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
+            else:
+                decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))  # Geser berlawanan arah
             decrypted_text += decrypted_char
 
             # Perbarui index kunci, jika sudah mencapai panjang kunci, ulangi kembali dari awal
@@ -658,8 +672,7 @@ def klasik2_key_release(event):
     if not klasik2_kunci.get() == "":
         klasik2_chipper.delete(0, tk.END)
         klasik2_chipper.insert(0, vigenere_encrypt(klasik2_plaintext.get(), klasik2_kunci.get()))
-    else:
-        print("walah")
+
 
 def klasik2_key_release2(event):
     if not klasik2_kunci.get() == "":
@@ -878,11 +891,14 @@ def modern1_key_release(event):
     if ( len(modern1_kunci.get()) == 16 or len(modern1_kunci.get()) == 24 or len(modern1_kunci.get()) == 32 ) and (len(modern1_kunci2.get()) == 16):
         modern1_chipper.delete(0, tk.END)
         modern1_chipper.insert(0, encrypt_aes(modern1_plaintext.get(), modern1_kunci.get().encode(), modern1_kunci2.get().encode()))
-
+    else:
+        messagebox.showinfo("Warning", "Pastikan digit key berjumlah 16 atau 24 atau 32 \nDan digit key initialization vector (IV) berjumlah 16", )
 def modern1_key_release2(event):
     if (len(modern1_kunci.get()) == 16 or len(modern1_kunci.get()) == 24 or len(modern1_kunci.get()) == 32) and (len(modern1_kunci2.get()) == 16):
         modern1_plaintext.delete(0, tk.END)
         modern1_plaintext.insert(0, decrypt_aes(modern1_chipper.get(), modern1_kunci.get().encode(), modern1_kunci2.get().encode()))
+    else:
+        messagebox.showinfo("Warning", "Pastikan digit key berjumlah 16 atau 24 atau 32 \nDan digit key initialization vector (IV) berjumlah 16", )
 
 
 modern1_plaintext.bind("<KeyRelease>", modern1_key_release)
@@ -939,33 +955,7 @@ modern2_kunci.place(
     width=430.0,
     height=32.0
 )
-# ================================ kunci vi ke2
-tk.Label(
-    frame_modern2,
-    text="Initialization Vector (IV)",
-    font=("Roboto Regular", 10),
-    fg="#121212",
-    bg="white"
-).place(x=0, y=100)
-tk.Label(
-    frame_modern2,
-    image=textfield_medium,
-    bg="white"
-).place(x=0, y=125)
-modern2_kunci2 = tk.Entry(
-    frame_modern2,
-    bg="#FFFFFF",
-    fg="#000716",
-    bd=0,
-    highlightthickness=0,
-    # state="disabled"
-)
-modern2_kunci2.place(
-    x=15.0,
-    y=128.0,
-    width=430.0,
-    height=32.0
-)
+
 # ======================== plaintext
 tk.Label(
     frame_modern2,
@@ -1058,12 +1048,12 @@ Blowfish terkenal karena kecepatannya, efisiensi, dan keamanan, serta kemampuann
 algoritma yang lebih tua seperti DES."""
 
 def enkripsi_blowfish(teks_asli, kunci):
-  """Fungsi untuk mengenkripsi teks menggunakan algoritma Blowfish."""
+    """Fungsi untuk mengenkripsi teks menggunakan algoritma Blowfish."""
 
-  cipher = Blowfish.new(kunci, Blowfish.MODE_CBC)
-  iv = cipher.iv
-  teks_terenkripsi = cipher.encrypt(pad(teks_asli.encode(), Blowfish.block_size))
-  return iv + teks_terenkripsi
+    cipher = Blowfish.new(kunci, Blowfish.MODE_CBC)
+    iv = cipher.iv
+    teks_terenkripsi = cipher.encrypt(pad(teks_asli.encode(), Blowfish.block_size))
+    return iv + teks_terenkripsi
 
 def dekripsi_blowfish(teks_terenkripsi, kunci):
     """Fungsi untuk mendekripsi teks terenkripsi menggunakan algoritma Blowfish."""
@@ -1075,18 +1065,28 @@ def dekripsi_blowfish(teks_terenkripsi, kunci):
     return teks_asli
 
 def modern2_key_release(event):
-    if len(modern2_kunci.get()) >= 8:
-        print(modern2_plaintext.get())
-        print(modern1_kunci.get().encode())
+    if 8 <= len(modern2_kunci.get()) <= 56:
+        # print(modern2_plaintext.get())
+        # print(modern1_kunci.get().encode())
         modern2_chipper.delete(0, tk.END)
         modern2_chipper.insert(0, enkripsi_blowfish(modern2_plaintext.get(), modern2_kunci.get().encode()).hex())
-
+    else:
+        messagebox.showinfo("Warning",
+                            "Pastikan digit key lebih dari 7 dan kurang dari 57")
 def modern2_key_release2(event):
-    if len(modern2_kunci.get()) >= 8:
-        print("dari chipper : ", modern2_chipper.get())
-        print(modern1_kunci.get().encode())
+    if 8 <= len(modern2_kunci.get()) <= 56:
+        # print("dari chipper : ", modern2_chipper.get())
+        # print(modern1_kunci.get().encode())
         modern2_plaintext.delete(0, tk.END)
-        modern2_plaintext.insert(0, dekripsi_blowfish(bytes.fromhex(modern2_chipper.get()), modern2_kunci.get().encode()))
+        try:
+            hex1 = bytes.fromhex(modern2_chipper.get())
+            modern2_plaintext.insert(0, dekripsi_blowfish(hex1, modern2_kunci.get().encode()))
+        except:
+            print("")
+
+    else:
+        messagebox.showinfo("Warning",
+                            "Pastikan digit key lebih dari 7 dan kurang dari 57")
 
 # b'5CPt11aF4/bCPMznVet0fZOkWBL8zJjDJOYK6EDLKG0='
 # ee0652841d3ed5d7ec8bba19dee1d262
@@ -1278,7 +1278,7 @@ super_chippertext.place(
 def super_enkripsi_now():
     if (len(super_key_aes.get()) == 16 or len(super_key_aes.get()) == 24 or len(super_key_aes.get()) == 32) and (
             len(super_key_chipper.get()) > 0) and (len(super_key_vigenere.get()) > 0) and (
-            len(super_key_blowfish.get()) >= 8):
+            8 <= len(super_key_blowfish.get()) <= 56):
         text = super_plaintext.get()
         caesar = caesar_cipher(text, int(super_key_chipper.get()))
         vigenere = vigenere_encrypt(caesar, super_key_vigenere.get())
@@ -1286,11 +1286,17 @@ def super_enkripsi_now():
         blowfish_mase = enkripsi_blowfish(aes_mase, super_key_blowfish.get().encode()).hex()
         super_chippertext.delete(0, tk.END)
         super_chippertext.insert(0, blowfish_mase)
+    else:
+        messagebox.showinfo("Warning",
+                            "Pastikan digit key aes berjumlah 16 atau 24 atau 32\n"
+                            "Pastikan nilai key chipper > 0\n"
+                            "Pastikan digit key vigenere diisi\n"
+                            "Pastikan digit key blowfish berjumlah lebih besar dari 7 dan lebih kecil dari 57")
 
 def super_dekripsi_now():
     if (len(super_key_aes.get()) == 16 or len(super_key_aes.get()) == 24 or len(super_key_aes.get()) == 32) and (
             len(super_key_chipper.get()) > 0) and (len(super_key_vigenere.get()) > 0) and (
-            len(super_key_blowfish.get()) >= 8):
+            8 <= len(super_key_blowfish.get()) <= 56):
         text = super_chippertext.get()
         blowfish_dekrip = dekripsi_blowfish(bytes.fromhex(text), super_key_blowfish.get().encode())
         aes_dekrip = decrypt_aes(blowfish_dekrip, key=super_key_aes.get().encode(), iv="okokokokokokokok".encode())
@@ -1298,6 +1304,12 @@ def super_dekripsi_now():
         caesar_dekrip = caesar_cipher(vigenere_dekrip, -int(super_key_chipper.get()))
         super_plaintext.delete(0, tk.END)
         super_plaintext.insert(0, caesar_dekrip)
+    else:
+        messagebox.showinfo("Warning",
+                            "Pastikan digit key aes berjumlah 16 atau 24 atau 32\n"
+                            "Pastikan nilai key chipper > 0\n"
+                            "Pastikan digit key vigenere diisi\n"
+                            "Pastikan digit key blowfish berjumlah lebih besar dari 7 dan lebih kecil dari 57")
 
 Button(
     frame_super,
