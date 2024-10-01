@@ -22,7 +22,7 @@ from Crypto.Util.Padding import pad, unpad
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"D:\python_Backend_contoh\build\assets\frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets\frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -205,6 +205,10 @@ btn_atas = PhotoImage(
 btn_bawah = PhotoImage(
     file=relative_to_assets("abawah.png")
 )
+btn_reload = PhotoImage(
+    file=relative_to_assets("rotate.png")
+)
+
 
 
 def validate_input(new_text):
@@ -264,7 +268,7 @@ klasik1_kunci = EntryNumber(
     frame_klasik1,
     bg="#FFFFFF",
     fg="#000716",
-    placeholder="Masukan kunci 1 (angka)"
+    placeholder=""
 )
 klasik1_kunci.place(
     x=15.0,
@@ -275,7 +279,7 @@ klasik1_kunci.place(
 # ======================== plaintext
 tk.Label(
     frame_klasik1,
-    text="Masukan string plaintext",
+    text="Hasil | Masukan string plaintext",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -285,9 +289,10 @@ tk.Label(
     image=textfield_medium,
     bg="white"
 ).place(x=-1, y=125)
-klasik1_plaintext = PlaceholderEntry(
-    frame_klasik1,
-    placeholder="",
+klasik1_plaintext = Entry(
+    master=frame_klasik1,
+    bd=0,
+    highlightthickness=0,
     bg="#FFFFFF",
     fg="#000716"
 )
@@ -300,7 +305,7 @@ klasik1_plaintext.place(
 # ================================ chipper klasik1
 tk.Label(
     frame_klasik1,
-    text="Masukan string chipperText untuk mencari plainText",
+    text="Hasil | Masukan string chipperText untuk mencari plainText",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -310,9 +315,10 @@ tk.Label(
     image=textfield_medium,
     bg="white"
 ).place(x=-1, y=195)
-klasik1_chipper = PlaceholderEntry(
+klasik1_chipper = Entry(
     frame_klasik1,
-    placeholder="",
+    bd=0,
+    highlightthickness=0,
     bg="#FFFFFF",
     fg="#000716",
 )
@@ -352,6 +358,31 @@ Button(
 ).place(
     x=472.0,
     y=205.0,
+    width=20.0,
+    height=20.0
+)
+# ======================== btn reload ======================
+tk.Label(
+    frame_klasik1,
+    text="Reset",
+    font=("Roboto Regular", 10),
+    fg="#121212",
+    bg="white"
+).place(x=0, y=250)
+Button(
+    frame_klasik1,
+    image=btn_reload,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: [
+        klasik1_plaintext.delete(0, tk.END),
+        klasik1_chipper.delete(0, tk.END)
+    ],
+    relief="flat",
+    bg="white"
+).place(
+    x=50.0,
+    y=252.0,
     width=20.0,
     height=20.0
 )
@@ -530,7 +561,7 @@ klasik2_kunci.place(
 # ======================== plaintext
 tk.Label(
     frame_klasik2,
-    text="Masukan string plaintext",
+    text="Hasil | Masukan string plaintext",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -555,7 +586,7 @@ klasik2_plaintext.place(
 # ================================ chipper klasik1
 tk.Label(
     frame_klasik2,
-    text="Masukan string chipperText untuk mencari plainText",
+    text="Hasil | Masukan string chipperText untuk mencari plainText",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -607,6 +638,31 @@ Button(
 ).place(
     x=472.0,
     y=205.0,
+    width=20.0,
+    height=20.0
+)
+# ======================== btn reload ======================
+tk.Label(
+    frame_klasik2,
+    text="Reset",
+    font=("Roboto Regular", 10),
+    fg="#121212",
+    bg="white"
+).place(x=0, y=250)
+Button(
+    frame_klasik2,
+    image=btn_reload,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: [
+        klasik2_plaintext.delete(0, tk.END),
+        klasik2_chipper.delete(0, tk.END)
+    ],
+    relief="flat",
+    bg="white"
+).place(
+    x=50.0,
+    y=252.0,
     width=20.0,
     height=20.0
 )
@@ -763,7 +819,7 @@ modern1_kunci2.place(
 # ======================== plaintext
 tk.Label(
     frame_modern1,
-    text="Masukan string plaintext",
+    text="Hasil | Masukan string plaintext",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -789,7 +845,7 @@ modern1_plaintext.place(
 # ================================ chipper klasik1
 tk.Label(
     frame_modern1,
-    text="Masukan string chipperText untuk mencari plainText",
+    text="Hasil | Masukan string chipperText untuk mencari plainText",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -844,6 +900,32 @@ Button(
     width=20.0,
     height=20.0
 )
+# ======================== btn reload ======================
+tk.Label(
+    frame_modern1,
+    text="Reset",
+    font=("Roboto Regular", 10),
+    fg="#121212",
+    bg="white"
+).place(x=0, y=310)
+Button(
+    frame_modern1,
+    image=btn_reload,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: [
+        modern1_plaintext.delete(0, tk.END),
+        modern1_chipper.delete(0, tk.END)
+    ],
+    relief="flat",
+    bg="white"
+).place(
+    x=50.0,
+    y=312.0,
+    width=20.0,
+    height=20.0
+)
+
 
 # Fungsi enkripsi
 def encrypt_aes(plaintext, key, iv):
@@ -959,7 +1041,7 @@ modern2_kunci.place(
 # ======================== plaintext
 tk.Label(
     frame_modern2,
-    text="Masukan string plaintext",
+    text="Hasil | Masukan string plaintext",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -985,7 +1067,7 @@ modern2_plaintext.place(
 # ================================ chipper klasik1
 tk.Label(
     frame_modern2,
-    text="Masukan string chipperText untuk mencari plainText",
+    text="Hasil | Masukan string chipperText untuk mencari plainText",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -1037,6 +1119,31 @@ Button(
 ).place(
     x=472.0,
     y=268.0,
+    width=20.0,
+    height=20.0
+)
+# ======================== btn reload ======================
+tk.Label(
+    frame_modern2,
+    text="Reset",
+    font=("Roboto Regular", 10),
+    fg="#121212",
+    bg="white"
+).place(x=0, y=310)
+Button(
+    frame_modern2,
+    image=btn_reload,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: [
+        modern2_plaintext.delete(0, tk.END),
+        modern2_chipper.delete(0, tk.END)
+    ],
+    relief="flat",
+    bg="white"
+).place(
+    x=50.0,
+    y=312.0,
     width=20.0,
     height=20.0
 )
@@ -1222,7 +1329,7 @@ super_key_blowfish.place(
 # ============================ entry plaintext
 tk.Label(
     frame_super,
-    text="Masukan plaintext yang akan dienkripsi",
+    text="Hasil | Masukan plaintext yang akan dienkripsi",
     font=("Roboto Regular", 10),
     fg="#121212",
     bg="white"
@@ -1270,6 +1377,31 @@ super_chippertext.place(
     y=340.0,
     width=436.0,
     height=32.0
+)
+# ======================== btn reload ======================
+tk.Label(
+    frame_super,
+    text="Reset",
+    font=("Roboto Regular", 10),
+    fg="#121212",
+    bg="white"
+).place(x=0, y=390)
+Button(
+    frame_super,
+    image=btn_reload,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: [
+        super_plaintext.delete(0, tk.END),
+        super_chippertext.delete(0, tk.END)
+    ],
+    relief="flat",
+    bg="white"
+).place(
+    x=50.0,
+    y=392.0,
+    width=20.0,
+    height=20.0
 )
 
 
